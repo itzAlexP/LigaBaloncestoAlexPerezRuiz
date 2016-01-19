@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.Objects;
 
 
+//prueba
 /**
  * A Equipo.
  */
@@ -28,14 +29,14 @@ public class Equipo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    
+
+
     @Column(name = "nombre")
     private String nombre;
-    
+
     @Column(name = "localidad")
     private String localidad;
-    
+
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
