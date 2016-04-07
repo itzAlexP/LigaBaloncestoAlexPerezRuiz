@@ -78,7 +78,7 @@ public class JugadorResource {
     public ResponseEntity<List<Jugador>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-        Page<Jugador> page = jugadorRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+         Page<Jugador> page = jugadorRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jugadors", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -99,6 +99,18 @@ public class JugadorResource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @RequestMapping(value = "/jugadors/{id}/{canastas}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Jugador>> get(@PathVariable Long id, @PathVariable Integer canastas) {
+        log.debug("REST request to get Jugador : {}", id);
+        return Optional.ofNullable(jugadorRepository.Ejercicio2(id, canastas))
+            .map(jugador -> new ResponseEntity<>(
+                jugador,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
     /**
      * DELETE  /jugadors/:id -> delete the "id" jugador.
      */
@@ -111,4 +123,21 @@ public class JugadorResource {
         jugadorRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("jugador", id.toString())).build();
     }
+
+    //Consultar Canastas
+
+    @RequestMapping(value = "/jugadorsCanastas/{canastas}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Jugador>> get(@PathVariable Integer canastas) {
+        log.debug("REST request to get Jugador : {}", canastas);
+        return Optional.ofNullable(jugadorRepository.findByCanastasTotalesGreaterThanEqual(canastas))
+            .map(jugador -> new ResponseEntity<>(
+                jugador,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
 }

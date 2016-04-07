@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('ligabaloncestoApp')
+
+
     .factory('Jugador', function ($resource, DateUtils) {
         return $resource('api/jugadors/:id', {}, {
-            'query': { method: 'GET', isArray: true},
+            'query': {method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -25,6 +27,12 @@ angular.module('ligabaloncestoApp')
                     data.fechaNacimiento = DateUtils.convertLocaleDateToServer(data.fechaNacimiento);
                     return angular.toJson(data);
                 }
-            }
+            },
+            'idCanastas': {
+               method: 'GET', isArray: true, url: 'api/jugadors/:id/:canastas'}
+
+
+
+
         });
     });
